@@ -23,7 +23,9 @@ import java.util.List;
 public class FieldExperienceController {
     private final FieldExperienceService service;
 
-    public FieldExperienceController(FieldExperienceService service) { this.service = service; }
+    public FieldExperienceController(FieldExperienceService service) {
+        this.service = service;
+    }
 
     @PostMapping
     @Operation(summary = "현장 체험 신청 등록", description = "브랜치 기준 현장 체험 정보를 등록합니다.")
@@ -50,8 +52,16 @@ public class FieldExperienceController {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = FieldExperience.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
-    public ResponseEntity<List<FieldExperience>> listApproved(@Parameter(description = "조회 대상 브랜치 ID", example = "branch-001", required = true) @RequestParam String branchId) {
+    public ResponseEntity<List<FieldExperience>> listApproved(
+            @Parameter(description = "조회 대상 브랜치 ID", example = "branch-001", required = true) @RequestParam String branchId) {
         return ResponseEntity.ok(service.listApprovedByBranch(branchId));
+    }
+
+    @GetMapping("/pending")
+    @Operation(summary = "검토 대기 현장 체험 조회", description = "검토가 필요한 현장 체험 목록을 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = FieldExperience.class)))
+    public ResponseEntity<List<FieldExperience>> listPending() {
+        return ResponseEntity.ok(service.listPending());
     }
 
     @PostMapping("/{id}/moderate")

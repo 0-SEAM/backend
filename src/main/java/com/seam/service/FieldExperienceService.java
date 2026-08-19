@@ -13,7 +13,9 @@ import java.util.List;
 public class FieldExperienceService {
     private final FieldExperienceRepository repo;
 
-    public FieldExperienceService(FieldExperienceRepository repo) { this.repo = repo; }
+    public FieldExperienceService(FieldExperienceRepository repo) {
+        this.repo = repo;
+    }
 
     @Transactional
     public FieldExperience submit(FieldExperience exp) {
@@ -35,6 +37,10 @@ public class FieldExperienceService {
 
     public List<FieldExperience> listApprovedByBranch(String branchId) {
         return repo.findByBranchIdAndModerationStatus(branchId, FieldExperience.Moderation.APPROVED);
+    }
+
+    public List<FieldExperience> listPending() {
+        return repo.findByModerationStatus(FieldExperience.Moderation.PENDING);
     }
 
     @Transactional

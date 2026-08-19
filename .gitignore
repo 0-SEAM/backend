@@ -1,0 +1,41 @@
+
+# Maven build output
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Maven wrapper files
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# IDE and editor files
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# Spring Boot
+*.jar
+*.war
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+logs/
+
+# Environment and local configuration
+.env
+.env.*
+application-local.properties
+application-local.yml
+application-local.yaml
+
+# OS-generated files
+.DS_Store
+Thumbs.db

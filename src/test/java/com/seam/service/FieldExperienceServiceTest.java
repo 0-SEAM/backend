@@ -37,7 +37,8 @@ class FieldExperienceServiceTest {
         exp.setVisitResult("Approved");
         exp.setDurationMinutes(120);
 
-        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20))).thenReturn(false);
+        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20)))
+                .thenReturn(false);
         when(repo.save(exp)).thenReturn(exp);
 
         FieldExperience saved = service.submit(exp);
@@ -54,7 +55,8 @@ class FieldExperienceServiceTest {
         exp.setAuthorId("author-1");
         exp.setVisitDate(LocalDate.of(2026, 8, 20));
 
-        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20))).thenReturn(true);
+        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20)))
+                .thenReturn(true);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.submit(exp));
 
@@ -70,7 +72,8 @@ class FieldExperienceServiceTest {
         exp.setVisitDate(LocalDate.of(2026, 8, 20));
         exp.setRequiredDocs("주민번호 900101-1234567");
 
-        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20))).thenReturn(false);
+        when(repo.existsByBranchIdAndAuthorIdAndVisitDate("branch-1", "author-1", LocalDate.of(2026, 8, 20)))
+                .thenReturn(false);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.submit(exp));
 
@@ -81,12 +84,23 @@ class FieldExperienceServiceTest {
     @Test
     void listApprovedByBranch_shouldReturnApprovedExperiences() {
         FieldExperience one = new FieldExperience();
-        when(repo.findByBranchIdAndModerationStatus("branch-1", FieldExperience.Moderation.APPROVED)).thenReturn(List.of(one));
+        when(repo.findByBranchIdAndModerationStatus("branch-1", FieldExperience.Moderation.APPROVED))
+                .thenReturn(List.of(one));
 
         List<FieldExperience> result = service.listApprovedByBranch("branch-1");
 
         assertEquals(1, result.size());
         assertEquals(one, result.get(0));
+    }
+
+    @Test
+    void listPending_shouldReturnPendingExperiences() {
+        FieldExperience one = new FieldExperience();
+        when(repo.findByModerationStatus(FieldExperience.Moderation.PENDING)).thenReturn(List.of(one));
+
+        List<FieldExperience> result = service.listPending();
+
+        assertEquals(List.of(one), result);
     }
 
     @Test
