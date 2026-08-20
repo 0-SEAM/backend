@@ -44,6 +44,40 @@ Run:
 mvn spring-boot:run
 ```
 
+## 인증 API
+
+회원가입 또는 로그인을 하면 백엔드가 access token과 refresh token을 반환합니다.
+개인 데이터 API는 이후 요청부터 다음 헤더를 사용합니다.
+
+```http
+Authorization: Bearer <accessToken>
+```
+
+```http
+POST /api/auth/signup
+POST /api/auth/login
+POST /api/auth/refresh
+POST /api/auth/logout
+```
+
+프론트엔드는 `VITE_API_BASE_URL`을 백엔드 주소로 설정해야 합니다. access token이 만료되면 refresh token으로 한 번 갱신한 뒤 원 요청을 재시도합니다.
+
+## 운영 환경변수
+
+가비아 서버에서는 값을 소스에 저장하지 않고 프로세스 환경변수로 주입합니다.
+
+```properties
+DB_URL=jdbc:mysql://<host>:3306/<database>
+DB_USERNAME=<database-user>
+DB_PASSWORD=<database-password>
+JWT_SECRET=<32바이트 이상 무작위 값>
+JWT_ACCESS_EXPIRATION_MS=900000
+JWT_REFRESH_EXPIRATION_MS=1209600000
+CORS_ALLOWED_ORIGINS=https://<frontend-domain>
+```
+
+`JWT_SECRET`, `DB_PASSWORD`는 Git에 커밋하지 않습니다. 현재 기본 H2 설정은 로컬 개발용이며 운영에서는 가비아 DB 연결 정보로 바꿔야 합니다.
+
 ## 참고
 - API 문서: Swagger/OpenAPI 기반으로 각 Controller 설명 제공
 - 주요 패키지: `controller`, `service`, `dto`, `entity`, `repository`
