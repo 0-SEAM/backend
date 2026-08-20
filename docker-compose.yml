@@ -1,4 +1,24 @@
 services:
+  mysql:
+    image: mysql:8.4
+    container_name: seam-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-seamdb}
+      MYSQL_USER: ${MYSQL_USER:-seam}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-seam-password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root-password}
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$${MYSQL_USER}", "-p$${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   backend:
     container_name: seam-backend
     build:
@@ -7,6 +27,19 @@ services:
     image: seam-backend:latest
     ports:
       - "8080:8080"
+    env_file:
+      - ./.env
     environment:
       TZ: Asia/Seoul
+      DB_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-seamdb}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      DB_DRIVER: com.mysql.cj.jdbc.Driver
+      DB_USERNAME: ${MYSQL_USER:-seam}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-seam-password}
+      H2_CONSOLE_ENABLED: "false"
+    depends_on:
+      mysql:
+        condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  mysql-data:
