@@ -18,6 +18,9 @@ public class UserConditionDto {
     @NotNull
     private LocalDate entryDate;
 
+    @Schema(description = "체류 자격 변경 신청일", example = "2026-08-20")
+    private LocalDate registrationAppliedDate;
+
     @Schema(description = "근무지 위치", example = "Seoul")
     private String workplaceLocation;
 
@@ -30,18 +33,67 @@ public class UserConditionDto {
     @Schema(description = "최종 수정 시각", example = "2026-08-18T09:00:00+09:00")
     private OffsetDateTime updatedAt;
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
-    public String getVisaStatus() { return visaStatus; }
-    public void setVisaStatus(String visaStatus) { this.visaStatus = visaStatus; }
-    public LocalDate getEntryDate() { return entryDate; }
-    public void setEntryDate(LocalDate entryDate) { this.entryDate = entryDate; }
-    public String getWorkplaceLocation() { return workplaceLocation; }
-    public void setWorkplaceLocation(String workplaceLocation) { this.workplaceLocation = workplaceLocation; }
-    public String getResidenceLocation() { return residenceLocation; }
-    public void setResidenceLocation(String residenceLocation) { this.residenceLocation = residenceLocation; }
-    public LocalDate getArcExpiryDate() { return arcExpiryDate; }
-    public void setArcExpiryDate(LocalDate arcExpiryDate) { this.arcExpiryDate = arcExpiryDate; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getVisaStatus() {
+        return visaStatus;
+    }
+
+    public void setVisaStatus(String visaStatus) {
+        this.visaStatus = visaStatus;
+    }
+
+    public LocalDate getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(LocalDate entryDate) {
+        this.entryDate = entryDate;
+    }
+
+    public LocalDate getRegistrationAppliedDate() {
+        return registrationAppliedDate;
+    }
+
+    public void setRegistrationAppliedDate(LocalDate registrationAppliedDate) {
+        this.registrationAppliedDate = registrationAppliedDate;
+    }
+
+    public String getWorkplaceLocation() {
+        return workplaceLocation;
+    }
+
+    public void setWorkplaceLocation(String workplaceLocation) {
+        this.workplaceLocation = workplaceLocation;
+    }
+
+    public String getResidenceLocation() {
+        return residenceLocation;
+    }
+
+    public void setResidenceLocation(String residenceLocation) {
+        this.residenceLocation = residenceLocation;
+    }
+
+    public LocalDate getArcExpiryDate() {
+        return arcExpiryDate;
+    }
+
+    public void setArcExpiryDate(LocalDate arcExpiryDate) {
+        this.arcExpiryDate = arcExpiryDate;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
