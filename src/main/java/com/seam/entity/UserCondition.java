@@ -12,6 +12,8 @@ public class UserCondition {
 
     private String visaStatus;
 
+    private String visaType;
+
     private LocalDate entryDate;
 
     private LocalDate registrationAppliedDate;
@@ -38,6 +40,14 @@ public class UserCondition {
 
     public void setVisaStatus(String visaStatus) {
         this.visaStatus = visaStatus;
+    }
+
+    public String getVisaType() {
+        return visaType;
+    }
+
+    public void setVisaType(String visaType) {
+        this.visaType = visaType;
     }
 
     public LocalDate getEntryDate() {

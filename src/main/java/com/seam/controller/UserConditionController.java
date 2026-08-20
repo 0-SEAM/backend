@@ -39,6 +39,7 @@ public class UserConditionController {
                 UserCondition u = new UserCondition();
                 u.setUserId(dto.getUserId());
                 u.setVisaStatus(dto.getVisaStatus());
+                u.setVisaType(dto.getVisaType());
                 u.setEntryDate(dto.getEntryDate());
                 u.setRegistrationAppliedDate(dto.getRegistrationAppliedDate());
                 u.setWorkplaceLocation(dto.getWorkplaceLocation());
@@ -77,6 +78,7 @@ public class UserConditionController {
                 UserCondition u = new UserCondition();
                 u.setUserId(dto.getUserId());
                 u.setVisaStatus(dto.getVisaStatus());
+                u.setVisaType(dto.getVisaType());
                 u.setEntryDate(dto.getEntryDate());
                 u.setRegistrationAppliedDate(dto.getRegistrationAppliedDate());
                 u.setWorkplaceLocation(dto.getWorkplaceLocation());

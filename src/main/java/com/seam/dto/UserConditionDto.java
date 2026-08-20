@@ -14,6 +14,9 @@ public class UserConditionDto {
     @NotNull
     private String visaStatus;
 
+    @Schema(description = "비자 종류", example = "E-7")
+    private String visaType;
+
     @Schema(description = "입국 일자", example = "2024-01-15", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private LocalDate entryDate;
@@ -47,6 +50,14 @@ public class UserConditionDto {
 
     public void setVisaStatus(String visaStatus) {
         this.visaStatus = visaStatus;
+    }
+
+    public String getVisaType() {
+        return visaType;
+    }
+
+    public void setVisaType(String visaType) {
+        this.visaType = visaType;
     }
 
     public LocalDate getEntryDate() {
