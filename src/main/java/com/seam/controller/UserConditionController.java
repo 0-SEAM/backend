@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -35,7 +36,8 @@ public class UserConditionController {
         })
         public ResponseEntity<UserCondition> create(
                         @Valid @RequestBody UserConditionDto dto,
-                        @Parameter(name = "X-User-Id", description = "요청자 사용자 ID", required = true, example = "user-001") @RequestHeader("X-User-Id") String requester) {
+                        Authentication authentication) {
+                String requester = authentication.getName();
                 UserCondition u = new UserCondition();
                 u.setUserId(dto.getUserId());
                 u.setVisaStatus(dto.getVisaStatus());
@@ -57,7 +59,8 @@ public class UserConditionController {
         })
         public ResponseEntity<UserCondition> get(
                         @Parameter(description = "조회 대상 사용자 ID", example = "user-001", required = true) @PathVariable String userId,
-                        @Parameter(name = "X-User-Id", description = "요청자 사용자 ID", required = true, example = "user-001") @RequestHeader("X-User-Id") String requester) {
+                        Authentication authentication) {
+                String requester = authentication.getName();
                 return service.findByUserId(userId, requester).map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
         }
@@ -72,7 +75,8 @@ public class UserConditionController {
         public ResponseEntity<UserCondition> update(
                         @Parameter(description = "수정 대상 사용자 ID", example = "user-001", required = true) @PathVariable String userId,
                         @Valid @RequestBody UserConditionDto dto,
-                        @Parameter(name = "X-User-Id", description = "요청자 사용자 ID", required = true, example = "user-001") @RequestHeader("X-User-Id") String requester) {
+                        Authentication authentication) {
+                String requester = authentication.getName();
                 if (!userId.equals(dto.getUserId()))
                         return ResponseEntity.badRequest().build();
                 UserCondition u = new UserCondition();
