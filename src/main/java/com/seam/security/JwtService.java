@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -14,20 +15,29 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private final SecretKey signingKey;
+    private static final int MIN_SECRET_BYTES = 32;
+
+    private final String secret;
     private final long accessExpirationMs;
-    private final long refreshExpirationMs;
+    private final long refreshExpirationMsValue;
+
+    private SecretKey signingKey;
 
     public JwtService(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.access-expiration-ms}") long accessExpirationMs,
             @Value("${app.jwt.refresh-expiration-ms}") long refreshExpirationMs) {
-        if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+        this.secret = secret;
+        this.accessExpirationMs = accessExpirationMs;
+        this.refreshExpirationMsValue = refreshExpirationMs;
+    }
+
+    @PostConstruct
+    public void init() {
+        if (secret.getBytes(StandardCharsets.UTF_8).length < MIN_SECRET_BYTES) {
             throw new IllegalArgumentException("JWT secret must be at least 32 bytes");
         }
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.accessExpirationMs = accessExpirationMs;
-        this.refreshExpirationMs = refreshExpirationMs;
     }
 
     public String createAccessToken(UserAccount user) {
@@ -35,7 +45,7 @@ public class JwtService {
     }
 
     public String createRefreshToken(UserAccount user) {
-        return createToken(user, "REFRESH", refreshExpirationMs);
+        return createToken(user, "REFRESH", refreshExpirationMsValue);
     }
 
     public boolean isAccessToken(String token) {
@@ -54,7 +64,9 @@ public class JwtService {
         return parse(token).get("role", String.class);
     }
 
-    public long refreshExpirationMs() { return refreshExpirationMs; }
+    public long refreshExpirationMs() {
+        return refreshExpirationMsValue;
+    }
 
     private String createToken(UserAccount user, String tokenType, long expirationMs) {
         Instant now = Instant.now();

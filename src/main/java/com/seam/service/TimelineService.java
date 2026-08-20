@@ -6,13 +6,19 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class TimelineService {
     private final TimelineTaskRepository repo;
 
-    public TimelineService(TimelineTaskRepository repo) { this.repo = repo; }
+    public TimelineService(TimelineTaskRepository repo) {
+        this.repo = repo;
+    }
 
     public List<TimelineTask> getTimeline(String userId) {
         return repo.findByUserIdOrderByPriorityAsc(userId);
@@ -20,52 +26,58 @@ public class TimelineService {
 
     @Transactional
     public TimelineTask updateTaskStatus(Long taskId, TimelineTask.Status status) {
-        TimelineTask t = repo.findById(taskId).orElseThrow(() -> new NoSuchElementException("Task not found"));
-        t.setStatus(status);
-        if (status == TimelineTask.Status.DONE) t.setCompletedAt(java.time.OffsetDateTime.now());
-        TimelineTask saved = repo.save(t);
-        recalculateForUser(t.getUserId());
+        TimelineTask task = repo.findById(taskId).orElseThrow(() -> new NoSuchElementException("Task not found"));
+        task.setStatus(status);
+        if (status == TimelineTask.Status.DONE) {
+            task.setCompletedAt(OffsetDateTime.now());
+        }
+        TimelineTask saved = repo.save(task);
+        recalculateForUser(task.getUserId());
         return saved;
     }
 
     @Transactional
     public void recalculateForUser(String userId) {
         List<TimelineTask> tasks = repo.findByUserIdOrderByPriorityAsc(userId);
-        Map<Long, TimelineTask> byId = new HashMap<>();
-        for (TimelineTask t : tasks) byId.put(t.getTaskId(), t);
+        Map<Long, TimelineTask> byId = new HashMap<Long, TimelineTask>();
+        for (TimelineTask task : tasks) {
+            byId.put(task.getTaskId(), task);
+        }
 
         // example deterministic offsets per task type
-        Map<String, Integer> baseOffset = Map.of(
+        Map<String, Integer> baseOffset = Map.<String, Integer>of(
                 "REGISTER_RESIDENCE", 7,
                 "OPEN_BANK_ACCOUNT", 5,
                 "GET_ARC", 14,
                 "GET_SIM", 3
         );
 
-        for (TimelineTask t : tasks) {
+        for (TimelineTask task : tasks) {
             LocalDate recommended = LocalDate.now();
-            int offset = baseOffset.getOrDefault(t.getTaskType(), 1);
+            int offset = baseOffset.getOrDefault(task.getTaskType(), 1);
             recommended = recommended.plusDays(offset);
-            if (t.getPrerequisiteTaskIds() != null && !t.getPrerequisiteTaskIds().isEmpty()) {
+            if (task.getPrerequisiteTaskIds() != null && !task.getPrerequisiteTaskIds().isEmpty()) {
                 LocalDate max = recommended;
-                for (Long pid : t.getPrerequisiteTaskIds()) {
-                    TimelineTask p = byId.get(pid);
-                    if (p != null && p.getRecommendedDate() != null) {
-                        LocalDate candidate = p.getRecommendedDate().plusDays(1);
-                        if (candidate.isAfter(max)) max = candidate;
+                for (Long pid : task.getPrerequisiteTaskIds()) {
+                    TimelineTask prerequisite = byId.get(pid);
+                    if (prerequisite != null && prerequisite.getRecommendedDate() != null) {
+                        LocalDate candidate = prerequisite.getRecommendedDate().plusDays(1);
+                        if (candidate.isAfter(max)) {
+                            max = candidate;
+                        }
                     }
                 }
                 recommended = max;
             }
-            t.setRecommendedDate(recommended);
-            repo.save(t);
+            task.setRecommendedDate(recommended);
+            repo.save(task);
         }
     }
 
     @Transactional
-    public TimelineTask createTask(TimelineTask t) {
-        TimelineTask saved = repo.save(t);
-        recalculateForUser(t.getUserId());
+    public TimelineTask createTask(TimelineTask task) {
+        TimelineTask saved = repo.save(task);
+        recalculateForUser(task.getUserId());
         return saved;
     }
 }

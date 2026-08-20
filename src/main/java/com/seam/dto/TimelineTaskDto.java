@@ -4,6 +4,7 @@ import com.seam.entity.TimelineTask;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineTaskDto {
@@ -26,16 +27,51 @@ public class TimelineTaskDto {
     @Schema(description = "선행 작업 ID 목록", example = "[1, 2]")
     private List<Long> prerequisiteTaskIds;
 
-    public Long getTaskId() { return taskId; }
-    public void setTaskId(Long taskId) { this.taskId = taskId; }
-    public String getTaskType() { return taskType; }
-    public void setTaskType(String taskType) { this.taskType = taskType; }
-    public Integer getPriority() { return priority; }
-    public void setPriority(Integer priority) { this.priority = priority; }
-    public LocalDate getRecommendedDate() { return recommendedDate; }
-    public void setRecommendedDate(LocalDate recommendedDate) { this.recommendedDate = recommendedDate; }
-    public TimelineTask.Status getStatus() { return status; }
-    public void setStatus(TimelineTask.Status status) { this.status = status; }
-    public List<Long> getPrerequisiteTaskIds() { return prerequisiteTaskIds; }
-    public void setPrerequisiteTaskIds(List<Long> prerequisiteTaskIds) { this.prerequisiteTaskIds = prerequisiteTaskIds; }
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getRecommendedDate() {
+        return recommendedDate;
+    }
+
+    public void setRecommendedDate(LocalDate recommendedDate) {
+        this.recommendedDate = recommendedDate;
+    }
+
+    public TimelineTask.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimelineTask.Status status) {
+        this.status = status;
+    }
+
+    public List<Long> getPrerequisiteTaskIds() {
+        return new ArrayList<>(prerequisiteTaskIds);
+    }
+
+    public void setPrerequisiteTaskIds(List<Long> prerequisiteTaskIds) {
+        this.prerequisiteTaskIds = new ArrayList<>(prerequisiteTaskIds);
+    }
 }

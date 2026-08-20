@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService service;
 
-    public AuthController(AuthService service) { this.service = service; }
+    public AuthController(AuthService service) {
+        this.service = service;
+    }
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")

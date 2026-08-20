@@ -11,7 +11,9 @@ import java.util.Optional;
 public class UserConditionService {
     private final UserConditionRepository repo;
 
-    public UserConditionService(UserConditionRepository repo) { this.repo = repo; }
+    public UserConditionService(UserConditionRepository repo) {
+        this.repo = repo;
+    }
 
     public UserCondition upsert(UserCondition cond, String requesterUserId) {
         if (!requesterUserId.equals(cond.getUserId())) {
@@ -22,7 +24,9 @@ public class UserConditionService {
     }
 
     public Optional<UserCondition> findByUserId(String userId, String requesterUserId) {
-        if (!requesterUserId.equals(userId)) throw new IllegalArgumentException("Can only view own data");
+        if (!requesterUserId.equals(userId)) {
+            throw new IllegalArgumentException("Can only view own data");
+        }
         return repo.findById(userId);
     }
 }

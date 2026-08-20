@@ -29,7 +29,9 @@ public class AuthService {
     @Transactional
     public AuthResponse signup(SignupRequest request) {
         String email = request.getEmail().trim().toLowerCase();
-        if (repository.existsByEmail(email)) throw new IllegalArgumentException("Email is already registered");
+        if (repository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email is already registered");
+        }
 
         UserAccount user = new UserAccount();
         user.setUserId(UUID.randomUUID().toString());
@@ -54,10 +56,12 @@ public class AuthService {
     public AuthResponse refresh(RefreshTokenRequest request) {
         String userId;
         try {
-            if (!jwtService.isRefreshToken(request.getRefreshToken())) throw new IllegalArgumentException("Invalid refresh token");
+            if (!jwtService.isRefreshToken(request.getRefreshToken())) {
+                throw new IllegalArgumentException("Invalid refresh token");
+            }
             userId = jwtService.getUserId(request.getRefreshToken());
         } catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Invalid refresh token");
+            throw new IllegalArgumentException("Invalid refresh token", ex);
         }
 
         UserAccount user = repository.findById(userId)

@@ -10,10 +10,14 @@ import java.util.List;
 public class GuideContentService {
     private final GuideContentRepository repo;
 
-    public GuideContentService(GuideContentRepository repo) { this.repo = repo; }
+    public GuideContentService(GuideContentRepository repo) {
+        this.repo = repo;
+    }
 
     public List<GuideContent> listByType(String type) {
-        if (type == null) return repo.findAll();
+        if (type == null) {
+            return repo.findAll();
+        }
         return repo.findByContentType(type);
     }
 }

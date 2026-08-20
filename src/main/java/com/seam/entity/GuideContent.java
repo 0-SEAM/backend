@@ -1,6 +1,10 @@
 package com.seam.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -14,18 +18,47 @@ public class GuideContent {
 
     private String version;
 
-    private boolean isOfflineAvailable;
+    private boolean offlineAvailable;
 
     private OffsetDateTime lastUpdatedAt;
 
-    public Long getContentId() { return contentId; }
-    public void setContentId(Long contentId) { this.contentId = contentId; }
-    public String getContentType() { return contentType; }
-    public void setContentType(String contentType) { this.contentType = contentType; }
-    public String getVersion() { return version; }
-    public void setVersion(String version) { this.version = version; }
-    public boolean isOfflineAvailable() { return isOfflineAvailable; }
-    public void setOfflineAvailable(boolean offlineAvailable) { isOfflineAvailable = offlineAvailable; }
-    public OffsetDateTime getLastUpdatedAt() { return lastUpdatedAt; }
-    public void setLastUpdatedAt(OffsetDateTime lastUpdatedAt) { this.lastUpdatedAt = lastUpdatedAt; }
+    public Long getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public boolean isOfflineAvailable() {
+        return offlineAvailable;
+    }
+
+    public void setOfflineAvailable(boolean offlineAvailable) {
+        this.offlineAvailable = offlineAvailable;
+    }
+
+    public OffsetDateTime getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(OffsetDateTime lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
 }
