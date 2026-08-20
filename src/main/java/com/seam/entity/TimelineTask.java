@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "timeline_tasks")
+@Table(name = "timeline_tasks", indexes = @Index(name = "idx_timeline_user_priority", columnList = "userId, priority"))
 public class TimelineTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

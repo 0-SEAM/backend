@@ -4,11 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "guide_contents")
+@Table(name = "guide_contents", indexes = @Index(name = "idx_guide_content_type", columnList = "contentType"))
 public class GuideContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

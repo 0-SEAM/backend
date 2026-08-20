@@ -6,6 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -13,7 +14,12 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "field_experiences", uniqueConstraints = @UniqueConstraint(columnNames = {"branchId","authorId","visitDate"}))
+@Table(name = "field_experiences",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"branchId","authorId","visitDate"}),
+    indexes = {
+        @Index(name = "idx_field_exp_branch_moderation", columnList = "branchId, moderationStatus"),
+        @Index(name = "idx_field_exp_moderation_status", columnList = "moderationStatus")
+    })
 public class FieldExperience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,11 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "user_accounts")
+@Table(name = "user_accounts", indexes = {
+    @Index(name = "idx_user_accounts_email", columnList = "email", unique = true),
+    @Index(name = "idx_user_accounts_refresh_token", columnList = "refreshToken")
+})
 public class UserAccount {
   @Id
   private String userId;

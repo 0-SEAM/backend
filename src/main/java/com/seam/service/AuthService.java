@@ -74,9 +74,9 @@ public class AuthService {
 
     @Transactional
     public void logout(RefreshTokenRequest request) {
-        repository.findAll().stream()
-            .filter(user -> user.getRefreshToken() != null
-                && passwordEncoder.matches(request.getRefreshToken(), user.getRefreshToken()))
+        // 토큰이 NULL이 아닌 사용자만 조회하여 전체 테이블 스캔 방지
+        repository.findUsersWithRefreshToken().stream()
+            .filter(user -> passwordEncoder.matches(request.getRefreshToken(), user.getRefreshToken()))
                 .findFirst()
                 .ifPresent(user -> {
                     user.setRefreshToken(null);
